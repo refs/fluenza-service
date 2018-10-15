@@ -1,0 +1,21 @@
+%table.table.influencer-top-level-fields{style: "width: 49%; display: inherit"}
+  %tbody{style: "background-color: white"}
+    %tr
+      %td
+        - if @influencer.account.posts.count == 0
+          %td "0 Posts"
+        - else
+          %td= "#{number_to_human(@influencer.account.posts.count)} posts"
+    %tr
+      %td
+        - if @influencer.account.ig_follows.nil?
+          %td -
+        - else
+          %td= "#{number_to_human(@influencer.account.ig_follows)} followers"
+
+%table.table.influencer-top-level-fields{style: "width: 49%; display: inherit; float: right"}
+  %tbody{style: "background-color: white"}
+    %tr
+      %td= "#{number_to_human(@influencer.likes)} likes"
+    %tr
+      %td= "#{number_to_human(@influencer.comments)} comments"

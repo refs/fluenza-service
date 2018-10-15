@@ -1,0 +1,4 @@
+- if current_user.campaigns.any?
+  .collection
+    - current_user.campaigns.each do |campaign|
+      = link_to campaign.name, user_campaign_path(current_user, campaign), class: 'collection-item'

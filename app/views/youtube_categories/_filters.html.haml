@@ -1,0 +1,6 @@
+.filters{style: "width: 100%"}
+  = link_to "Videos", :sort_by => "youtube_channel_video_count", :category => params[:category]
+  |
+  = link_to "Subscribers", :sort_by => "youtube_channel_subscriber_count", :category => params[:category]
+  |
+  = link_to "Views", :order_by => "youtube_channel_view_count", :category => params[:category]

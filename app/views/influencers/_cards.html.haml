@@ -1,0 +1,8 @@
+.cards-container
+  - @influencers.where(platform: 'YouTube').first(2).each do |i|
+    .card
+      .top{style: "background-image: url(#{i.account.youtube_channel_thumbnail})"}
+      .bottom
+        %p= i.title
+        %p= "#{number_to_human(i.account.videos.count)} videos"
+        %p= "#{number_to_human(i.account.youtube_channel_view_count)} views"

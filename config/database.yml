@@ -1,0 +1,16 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: 4
+
+development:
+  <<: *default
+  database: fluenza_development
+
+test:
+  <<: *default
+  database: fluenza_test
+
+# production:
+#   <<: *default
+#   database: fluenza_production

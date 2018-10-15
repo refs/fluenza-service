@@ -1,0 +1,27 @@
+.container.wide-container.ig-media
+  %table.table.fz-table
+    %thead
+      %tr
+        %td
+        %td
+        %td
+        %td.right likes
+        %td.right comments
+    %tbody
+      - if @posts.any?
+        - @posts.each do |post|
+          %tr
+            %td.fz-far__left= link_to image_tag(post.standard_res_image), influencer_post_path(@influencer, post), class: 'ig-post-image'
+            - if post.description.nil?
+              %td -
+            - else
+              %td{style: "width: 70%"}= truncate(post.description, length: 200)  { link_to "see more", influencer_post_path(@influencer.id, post.id) }
+            %td= link_to "view on instagram", "https://www.instagram.com/p/#{post.ig_code}", target: :_blank
+            %td.right= "#{post.like_count}"
+            %td.right= "#{post.comment_count}"
+      - else
+        %tr
+          %td{colspan: 4}
+
+.container{style: "text-align: center"}
+  .pagination= will_paginate @posts

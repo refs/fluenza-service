@@ -1,0 +1,61 @@
+%table.table.card__influencer--detail-table.card--right__half
+  %tbody
+    %tr
+      %td.borderless{style: "width: 90%"} views
+      %td.borderless.text-center
+        = number_to_human @youtube_account.youtube_channel_view_count
+      %td.borderless.text-center
+        - if @views_score < 2.0
+          .score-red
+            = @views_score
+        - if @views_score > 6.0
+          .score-green
+            = @views_score
+        - elsif @views_score > 2.0 && @views_score < 6.0
+          .score-yellow
+            = @views_score
+    %tr
+      %td subscribers
+      %td.borderless.text-center
+        = number_to_human @youtube_account.youtube_channel_subscriber_count
+      %td.borderless.text-center
+        - if @subscribers_score < 2.0
+          .score-red
+            = @subscribers_score
+        - if @subscribers_score > 6.0
+          .score-green
+            = @subscribers_score
+        - elsif @subscribers_score > 2.0 && @subscribers_score < 6.0
+          .score-yellow
+            = @subscribers_score
+    %tr
+      %td engagement
+      %td.borderless.text-center
+        = "#{(@youtube_engagement_ratio).round(2)}%"
+      %td.borderless.text-center
+        - if @engagement_score < 1.0
+          .score-red
+            = @engagement_score
+        - if @engagement_score > 3.0
+          .score-green
+            = @engagement_score
+        - elsif @engagement_score > 1.0 && @engagement_score < 3.0
+          .score-yellow
+            = @engagement_score
+
+%table.table.card__influencer--detail-table.card--left__half
+  %tbody
+    %tr
+      %td.borderless{style: "width: 75%"} Category
+      - if @influencer.account.category.nil?
+        %td.borderless.text-center -
+      - else
+        %td.borderless.text-center= link_to @influencer.account.category, "/youtube_categories?category=#{Account.categories[@influencer.account.category]}"
+    %tr
+      %td.borderless Sponsored content
+      %td.borderless
+        .borderless.text-center= "#{@sponsored_content_ratio[:percentage]}% - #{@sponsored_content_ratio[:quantified_content]} videos"
+    %tr
+      %td.borderless sponsored content views
+      %td.borderless
+        .borderless.text-center= "#{number_to_human @sponsored_content_views} (#{((@sponsored_content_views.to_f / @youtube_account.youtube_channel_view_count) * 100).round(2)}%)"

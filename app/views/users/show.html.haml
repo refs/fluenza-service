@@ -1,0 +1,17 @@
+.container.wide-container
+  %h1{style: "margin: 10px"} #{link_to 'users', users_path} / #{@user.email}
+  - if @user.email == current_user.email
+    .sync_account_container{style: "display: inline-block"}
+      .sync_account{style: "margin: 10px; display: inherit"}= link_to "Add YouTube account", @youtube_auth_url, class: "btn btn-success"
+      .sync_account{style: "margin: 10px; display: inherit"}= link_to "Add Instagram account", @instagram_auth_url, class: "btn btn-success"
+
+  %table.table
+    %tbody
+      %tr
+        %td
+          youtube auth token:
+          = !@user.youtube_auth_token.nil? ? @user.youtube_auth_token : "empty"
+      %tr
+        %td
+          instagram auth token:
+          = !@user.instagram_auth_token.nil? ? @user.instagram_auth_token : "empty"

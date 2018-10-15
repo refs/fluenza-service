@@ -1,0 +1,18 @@
+.row
+  .col.s6.offset-s3
+    .row.form-card{style: "background-color: rgba(128, 128, 128, 0.05)"}
+      = form_for(resource, as: resource_name, url: session_path(resource_name), html: { role: 'form' }) do |f|
+        .input-field.col.s12
+          = f.label :email
+          = f.email_field :email, autofocus: true, class: 'form-control'
+        .input-field.col.s12
+          = f.label :password
+          = f.password_field :password, autocomplete: 'off', class: 'form-control'
+        .col.s6.offset-s3
+          %p
+            = f.check_box :remember_me
+            = f.label :remember_me
+        .input-field.col.s6.offset-s3
+          = f.submit  t('.sign_in', default: 'Sign in'), class: 'btn'
+        .input-field.col.s6.offset-s3
+          = render 'devise/shared/links'

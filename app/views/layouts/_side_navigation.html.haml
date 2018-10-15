@@ -1,0 +1,31 @@
+.fz--side_navigation
+  .fz--side_navigation_title.fluenza-title Fluenza
+  .fz--side_navigation_container
+    .fz--side_navigation_link.profile_path_redirect{class: ('active' if current_page?(profile_path))}
+      %span.icon-home.navbar-icon
+      Profile
+      .arrow
+    .fz--side_navigation_link.accounts_path_redirect{class: ('active' if current_page?(accounts_path))}
+      %span.icon-rocket.navbar-icon
+      Explore
+      .arrow
+    .fz--side_navigation_link.influencers_path_redirect{class: ('active' if current_page?(influencers_path))}
+      %span.icon-star.navbar-icon
+      Influencers
+      .arrow
+    .fz--side_navigation_link
+      %span.icon-social-youtube.navbar-icon
+      YouTube
+    .fz--side_navigation_link_sub.categories_path_redirect{class: ('active' if current_page?(youtube_categories_path))}
+      %span.icon-list.navbar-icon
+      Categories
+      .arrow
+    - if current_user.has_role?(:admin)
+      .fz--side_navigation_link.users_path_redirect{class: ('active' if current_page?(users_path))}
+        %span.icon-cup.navbar-icon
+        Users
+        .arrow
+      .fz--side_navigation_link.admin_path_redirect
+        %span.icon-wrench.navbar-icon
+        Admin
+        .arrow

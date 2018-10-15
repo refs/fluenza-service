@@ -1,0 +1,20 @@
+.container.wide-container
+  - if @search_results[:instagram] == 'No Instagram account found'
+    .alert.alert-danger{role: "alert"}= @search_results[:instagram]
+  - else
+    .panel.search-result__panel.panel-info.instagram_panel
+      .panel-heading= 'Profile'
+      .panel-body
+        .search-result__channel_title
+          = link_to @search_results[:instagram_influencer].title, influencer_path(@search_results[:instagram_influencer])
+
+  - if @search_results[:youtube] == 'No channel found'
+    .alert.alert-danger{role: "alert"}= @search_results[:youtube]
+  - else
+    - channel = @search_results[:youtube]
+    .panel.search-result__panel.panel-info
+      .panel-heading= 'Channel'
+      .panel-body
+        = image_tag channel.thumbnail_url
+        .search-result__channel_title
+          = link_to @search_results[:youtube_influencer].title, influencer_path(@search_results[:youtube_influencer])

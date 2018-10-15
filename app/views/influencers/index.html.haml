@@ -1,0 +1,53 @@
+.container.container-fluid.wide-container
+  .influencer-search
+    = form_tag influencers_path, method: :get do
+      = text_field_tag :title, nil, class: "form-control", placeholder: "Search..."
+
+  = "#{link_to 'Instagram', "/influencers?platform=Instagram"} | #{link_to 'YouTube', "/influencers?platform=YouTube"}".html_safe
+
+.row
+  .col.s6
+    .container.wide-container
+      %ul.collection.with-header
+        .collection-header
+          %h5 Instagram
+        - @influencers.each do |i|
+          - if i.platform == 'Instagram'
+            %li.collection-item.avatar
+              - if i.account.ig_profile_picture.nil?
+              - else
+                = image_tag i.account.ig_profile_picture, class: 'circle'
+              %span.title= link_to i.title, influencer_path(i)
+              %p= "#{number_to_human(i.account.ig_follows)} followers"
+              %p= "#{number_to_human(i.account.ig_overall_likes)} likes"
+              .secondary-content
+                - if current_user.profile.influencers.map(&:id).include?(i.id)
+                  .btn.disabled watching
+                - else
+                  %td.right
+                    = form_tag '/follow' do
+                      = hidden_field_tag 'influencer_id', i.id
+                      = submit_tag "watch", class: "btn waves-effect waves-light"
+                      = hidden_field_tag 'user_id', current_user.id
+  .col.s6
+    .container.wide-container
+      %ul.collection.with-header
+        .collection-header
+          %h5 Youtube
+        - @influencers.each do |i|
+          - if i.platform == 'YouTube'
+            %li.collection-item.avatar
+              = image_tag i.account.youtube_channel_thumbnail, style: 'width: 40px', class: 'circle'
+              %span.title= link_to i.title, influencer_path(i)
+              %p= "#{number_to_human(i.account.youtube_channel_subscriber_count)} subscribers"
+              %p= "#{number_to_human(i.account.youtube_channel_view_count)} views"
+              .secondary-content
+                - if current_user.profile.influencers.map(&:id).include?(i.id)
+                  .btn.disabled watching
+                - else
+                  %td.right
+                    = form_tag '/follow' do
+                      = hidden_field_tag 'influencer_id', i.id
+                      = submit_tag "watch", class: "btn waves-effect waves-light"
+                      = hidden_field_tag 'user_id', current_user.id
+

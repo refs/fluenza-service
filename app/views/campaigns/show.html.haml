@@ -1,0 +1,87 @@
+.wide-container
+  .row
+    .col.s12
+      .card.teal.lighten-5
+        .card-content
+          %span.card-title= @campaign.name
+          - if @campaign.briefing.nil? || @campaign.briefing.empty?
+            %p{style: 'font-style: italic; color: grey;'} add a briefing to this campaign.
+          - else
+            %p{style: 'font-style: italic; color: grey;'}= @campaign.briefing
+        .card-action{style: 'text-align: right'}
+          = link_to 'Edit', edit_user_campaign_path(current_user, @campaign)
+
+- if @campaign.videos.any? || @campaign.posts.any?
+  .graph-container.card-4{style: 'width: 100%; background-color: rgba(251, 251, 251, 0.83)'}
+    .container.wide-container
+      .graph__md{style: 'width: 49%'}
+        %canvas#campaign-visualizations
+      .graph__md{style: 'width: 49%'}
+        %canvas#campaign-posts-likes
+
+:javascript
+  $(document).ready(function() {
+    drawCampaignVideoVisualizations($("#campaign-visualizations"))
+    drawCampaignPostLikes($("#campaign-posts-likes"))
+  })
+  $( function() {
+    $( "#posts-accordion" ).accordion({
+      collapsible: true,
+      active: false
+    });
+    $( "#videos-accordion" ).accordion({
+      collapsible: true,
+      active: false
+    });
+  } );
+
+%br
+- if @campaign.videos.any?
+  .campaign-video-components.card-4{style: 'padding: 3px; border-radius: 5px'}
+    .videos.accordion#videos-accordion
+      - @campaign.user_media_content.where.not(video_id: nil).includes(:video).order('created_at DESC').each do |video_join|
+        .header__container{style: 'width: 100%; display: inline-block'}
+          .title{style: 'width: 49%; display: inherit; margin: 0 auto'}
+            %p= 'Video'
+            %p= video_join.video.title
+          .stats{style: 'width: 49%; display: inherit; text-align: right'}
+            %p= "#{number_to_human(video_join.video.view_count)} views"
+            %p= "#{number_to_human(video_join.video.like_count)} likes"
+        .form-inline{style: 'width: 100%'}
+          = form_for video_join, remote: true do |f|
+            = f.label :budget
+            = f.text_field :budget, class: 'form-control input-group mb-2 mr-sm-2 mb-sm-0'
+            = f.label :annotations
+            = f.text_field :annotations, class: 'form-control input-group mb-2 mr-sm-2 mb-sm-0'
+            .btn.btn-warning{ id: "vj_#{video_join.id}", onclick: "submitPartial($(this), vj_#{video_join.id});" } update
+%br
+- if @campaign.posts.any?
+  .campaign-post-components.card-4{style: 'padding: 3px; border-radius: 5px'}
+    .posts.accordion#posts-accordion
+      - @campaign.user_media_content.where.not(post_id: nil).includes(:post).order('created_at DESC').each do |post_join|
+        .header__container{style: 'width: 100%; display: inline-block'}
+          .title{style: 'width: 49%; display: inherit; margin: 0 auto'}
+            %p= 'Post'
+            - if post_join.post.description.nil?
+              %p= '-'
+            - else
+              %p= post_join.post.description
+          .stats{style: 'width: 49%; display: inherit; text-align: right'}
+            %p= "#{number_to_human(post_join.post.like_count)} likes"
+            %p= "#{number_to_human(post_join.post.comment_count)} comments"
+
+        .form-inline{style: 'width: 100%'}
+          = form_for post_join, method: :patch, remote: true do |f|
+            = f.label :budget
+            = f.text_field :budget, class: 'form-control input-group mb-2 mr-sm-2 mb-sm-0'
+            = f.label :annotations
+            = f.text_field :annotations, class: 'form-control input-group mb-2 mr-sm-2 mb-sm-0'
+            .btn.btn-warning{ id: "vj_#{post_join.id}", onclick: "submitPartial($(this), vj_#{post_join.id});" } update
+
+:javascript
+  var submitPartial = function(form, target){
+    $('#' + target.id).removeClass("btn-warning")
+    target.innerHTML = "updated"
+    form.submit()
+    $('#' + target.id).addClass("btn-success")
+  }

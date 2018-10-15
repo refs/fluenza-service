@@ -1,0 +1,77 @@
+// export to a constants.sass
+$sidebar-background: #0F1A36
+$sidebar-foreground: #1A2647
+$dirty-white: rgba(255, 255, 255, 0.9)
+
+.fluenza-title
+  font-size: 2em
+  text-align: center
+  color: $dirty-white
+  background-color: inherit
+  padding: 5px 0px 20px 0px
+  font-weight: 200
+
+.fz--side_navigation
+  position: relative
+  position: fixed
+  float: left
+  width: 160px
+  background: -moz-linear-gradient(309deg, #0F1A36 42%, #0F1A36 45%, #1B2F61 100%)
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(42%, #0F1A36), color-stop(45%, #0F1A36), color-stop(100%, #1B2F61))
+  background: -webkit-linear-gradient(309deg, #0F1A36 42%, #0F1A36 45%, #1B2F61 100%)
+  background: -o-linear-gradient(309deg, #0F1A36 42%, #0F1A36 45%, #1B2F61 100%)
+  background: -ms-linear-gradient(309deg, #0F1A36 42%, #0F1A36 45%, #1B2F61 100%)
+  background: linear-gradient(141deg, #0F1A36 42%, #0F1A36 45%, #1B2F61 100%)
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0F1A36', endColorstr='#1B2F61',GradientType=0 )
+
+.fz--side_navigation_container
+
+  .fz--side_navigation_link
+    height: 35px
+    text-align: left
+    padding-left: 10px
+    line-height: 37px
+    color: $dirty-white
+    font-weight: 400
+    margin-left: 20px
+
+    .arrow
+      height: 10px
+      width: 10px
+      display: none
+      float: right
+      margin-top: 13px
+      margin-right: -5px
+      background-color: white
+      -ms-transform: rotate(45deg)
+      -webkit-transform: rotate(45deg)
+      transform: rotate(45deg)
+
+  .fz--side_navigation_link_sub
+    height: 35px
+    text-align: left
+    line-height: 37px
+    color: $dirty-white
+    font-weight: 400
+    margin-left: 42px
+
+    .arrow
+      height: 10px
+      width: 10px
+      display: none
+      float: right
+      margin-top: 13px
+      margin-right: -5px
+      background-color: white
+      -ms-transform: rotate(45deg)
+      -webkit-transform: rotate(45deg)
+      transform: rotate(45deg)
+
+  .fz--side_navigation_link:hover, .fz--side_navigation_link_sub:hover
+    cursor: pointer
+    .arrow
+      display: inline
+
+  .active
+    .arrow
+      display: inline

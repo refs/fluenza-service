@@ -1,0 +1,30 @@
+.container.container-fuid.wide-container
+  .jumbotron.discover-searchbox
+    %p{style: "text-align: center"} Explore
+    = form_tag(accounts_path, :method => "get") do
+      .input-group
+        = text_field_tag :handler, params[:channel_id], autofocus: true, placeholder: "Search in Youtube & Instagram", class: "form-control"
+        %span.input-group-btn
+          = button_tag("Go!", type: :submit, :name => nil, class: "btn", style: 'top: -5px') do
+            %span.glyphicon.glyphicon-search
+
+.container.cards__container--landing
+  .info__card
+    .content
+      .left
+        %span.icon-people{style: "font-size: 3em; color: #5dab5d"}
+        .empty__space{style: "height: 30px"}
+        Get in touch with the later influencers easier than ever.
+  .info__card
+    .content
+      .center
+        %span.icon-graph{style: "font-size: 3em; color: #6262ca"}
+        .empty__space{style: "height: 30px"}
+        Campaign performance tracking and in real time analytics.
+  .info__card
+    .content
+      .right
+        %span.icon-rocket{style: "font-size: 3em; color: #d46f6f"}
+        .empty__space{style: "height: 30px"}
+        %p
+          Search for any influencer out there in our discovery box!

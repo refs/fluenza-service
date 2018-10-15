@@ -1,0 +1,25 @@
+.container.wide-container
+  .composite.wide-container{style: "display: inline-block"}
+    .left{style: "display: inherit; width: 49%"}
+      .text-center= image_tag @post.standard_res_image, style: "height: 20em"
+    .right{style: "display: inherit; width: 49%"}
+      %table.table.text-center
+        %tbody
+          %tr
+            %td.bold= "#{@post.comment_count} comments"
+          %tr
+            %td.bold= "#{@post.like_count} likes"
+.container.wide-container
+  .graph-md{style: "width: 49%; position: relative; display: inline-block"}
+    %canvas#new-likes{style: "position: relative; display: inline-block;"}
+  .graph-md{style: "width: 49%; position: relative; display: inline-block"}
+    %canvas#new-visualizations{style: "position: relative; display: inline-block;"}
+  %table.table.fz-table
+    %tbody
+      %tr
+        %td= @post.description
+
+:javascript
+  $(document).ready(function() {
+    drawPostLikesFluctuations($("#new-likes"), "#{@post.id}")
+  })

@@ -1,0 +1,75 @@
+.container.wide-container
+  .test-c{style: "display: inline-block; text-align: right; padding-bottom: 10px; width: 100%"}
+    .link-to-posts{style: 'display: inherit'}
+      = link_to('Posts', influencer_posts_path(@influencer), class: 'btn btn-primary')
+    .link-to-capture-snap{style: 'display: inherit'}
+      = form_tag(refresh_snapshots_influencer_path(@influencer), :method => 'post') do
+        = button_tag('Capture Snapshot', type: :submit, :name => nil, class: 'btn btn-default')
+
+.panel.influencer-show-parent
+  .panel-body.influencer-show-panel
+    .container.wide-container
+      %table.table.influencer-top-level-fields
+        %tbody
+          %tr
+            - if @influencer.account.ig_profile_picture
+              %td.borderless= image_tag @influencer.account.ig_profile_picture, class: 'ig-profile-image'
+            - else
+              %td.borderless -
+            %td.borderless
+              %h5
+                .influencer-title{style: 'display: inline-block'}
+                  = @influencer.title
+                - if @influencer.account.account_snapshots.any?
+                  .last-time-updated{style: 'display: inline-block; font-style: italic; font-size: 0.5em; vertical-align: middle;'}
+                    = "(last time updated: #{distance_of_time_in_words(DateTime.now, @influencer.account.account_snapshots.last.created_at)} ago)"
+
+      .table-influencer-info-container{style: 'display: inline-block; width: 100%'}
+        = render 'ig_influencer_cards'
+
+.container.wide-container{style: 'padding-bottom: 40px'}
+  %h5 Top Hashtags
+  - @top_hashtags.each do |block|
+    .chip{style: 'background-color: #26a69a; color: white'}= "#{block[1].first}  x#{block[0]}"
+
+.container.wide-container
+  .graph-md{style: 'width: 49%; position: relative; display: inline-block'}
+    %canvas#instagram-followers{style: 'position: relative; display: inline-block;'}
+  .graph-md{style: 'width: 49%; position: relative; display: inline-block'}
+    %canvas#instagram-likes{style: 'position: relative; display: inline-block;'}
+
+:javascript
+  $(document).ready(function() {
+    drawInstagramFollowers($("#instagram-followers"))
+    drawInstagramLikes($("#instagram-likes"))
+  })
+
+
+.container.wide-container.ig-latest-media
+  %table.table.fz-table
+    %thead
+      %tr
+        %td{colspan: 3}
+        %td.right likes
+        %td.right comments
+    %tbody
+      - if @influencer.account.posts.any?
+        - @influencer.account.posts.order('published_at DESC').first(50).each do |post|
+          %tr
+            - if post.standard_res_image.nil?
+              %td.fz-far__left -
+            - else
+              %td.fz-far__left= link_to image_tag(post.standard_res_image, size: "40x40", alt: "deleted"), influencer_post_path(@influencer, post), class: 'ig-post-image'
+            - if post.description.nil?
+              %td -
+            - else
+              %td{style: 'width: 70%'}= post.description
+            - if post.ig_code.nil?
+              %td -
+            - else
+              %td= link_to 'view on instagram', "https://www.instagram.com/p/#{post.ig_code}", target: :_blank
+            %td.right= "#{post.like_count}"
+            %td.right= "#{post.comment_count}"
+      - else
+        %tr
+          %td{colspan: 4}

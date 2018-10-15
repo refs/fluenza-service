@@ -1,0 +1,9 @@
+%nav.navbar.navbar-default
+  .container
+    - if user_signed_in?
+      %ul.nav.navbar-nav.navbar-right
+        %li.navbar-right= link_to 'Logout', destroy_user_session_path, method: :delete
+      %p.navbar-text.navbar-right= "Signed in as #{current_user.email}"
+    %ul.nav.navbar-nav
+      %li= link_to 'Users', users_path
+      %li= link_to 'Accounts', accounts_path

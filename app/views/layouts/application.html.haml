@@ -1,0 +1,28 @@
+!!!
+%html
+  %head
+    %title Fluenza
+    %meta{property: "og:image", content: "/ms-icon-144x144.png"}
+    = csrf_meta_tags
+    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
+    = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
+    = javascript_include_tag 'https://cdnjs.cloudflare.com/ajax/libs/humanize-plus/1.8.2/humanize.min.js'
+  %body
+    - if user_signed_in?
+      .navbar-fixed
+        .row
+          %nav
+            .nav-wrapper.teal.darken-3
+              .col.s12
+                = link_to 'Fluenza', root_path, class: 'brand-logo'
+                %ul.right
+                  %li= link_to 'Explore', accounts_path, class: 'fz-custom-navbar'
+                  %li= link_to 'Influencers', influencers_path, class: 'fz-custom-navbar'
+                  %li= link_to 'Campaigns', user_campaigns_path(current_user), class: 'fz-custom-navbar'
+                  %li= link_to 'Profile', profile_path, class: 'fz-custom-navbar'
+                  - if user_signed_in?
+                    %li= link_to 'Logout', destroy_user_session_path, method: :delete, class: 'fz-custom-navbar'
+                    = "Signed in as #{current_user.email}"
+    %br
+    .container.wide-container
+    = yield

@@ -1,0 +1,82 @@
+.container.wide-container
+  .test-c{style: "display: inline-block; text-align: right; padding-bottom: 10px; width: 100%"}
+    .link-to-posts{style: "display: inherit"}
+      = link_to("Videos", influencer_videos_path(@influencer), class: "btn")
+    .link-to-capture-snap{style: "display: inherit"}
+      = form_tag(refresh_snapshots_influencer_path(@influencer), :method => "post") do
+        = button_tag("Capture Snapshot", type: :submit, :name => nil, class: "btn")
+
+.panel.influencer-show-parent
+  .panel-body.influencer-show-panel
+    .container.wide-container
+      %table.table.card__influencer--detail-table
+        %tbody
+          %tr
+            %td.borderless= image_tag(@youtube_account.youtube_channel_thumbnail)
+            %td.borderless
+              %h5
+                = @youtube_account.youtube_channel_title
+                - if @influencer_score < 2.0
+                  .score-red
+                    = @influencer_score
+                - if @influencer_score > 6.0
+                  .score-green
+                    = @influencer_score
+                - elsif @influencer_score > 2.0 && @influencer_score < 6.0
+                  .score-yellow
+                    = @influencer_score
+                .last-time-updated{style: 'display: inline-block; font-style: italic; font-size: 0.5em; vertical-align: middle;'}
+                  = "(last time updated: #{distance_of_time_in_words(DateTime.now, @influencer.account.account_snapshots.last.created_at)} ago)"
+
+      .cards__container
+        = render 'yt_subtables'
+    .container.wide-container
+      .graph__social
+        .positive{style: "width: #{(@youtube_interaction_like_ratio).round(0)}%"}
+          = "#{@youtube_interaction_like_ratio.round(0)}%"
+        .negative{style: "width: #{(@youtube_interaction_dislike_ratio).round(0)}%"}
+          = "#{@youtube_interaction_dislike_ratio.round(0)}%"
+
+.container.wide-container
+  .graph__md
+    %canvas#new-subscribers
+  .graph__md
+    %canvas#new-visualizations
+
+:javascript
+  $(document).ready(function() {
+    drawYoutubeViews($("#new-visualizations"))
+    drawYoutubeSubscribers($("#new-subscribers"))
+  })
+
+.container.wide-container
+  %table.table.fz-table
+
+.container.wide-container.yt-latest-media
+  %table.table.fz-table
+    %thead
+      %tr
+        %td
+        %td
+        %td
+        %td.right likes
+        %td.right dislikes
+        %td.right comments
+    %tbody
+      - if @influencer.account.videos.any?
+        - @influencer.account.videos.order('published_at DESC').first(10).each do |video|
+          - begin
+            %tr
+              %td.fz-far__left= link_to image_tag(Yt::Video.new(id: video.youtube_id).thumbnail_url), influencer_video_path(@influencer, video), class: 'yt-video-image'
+              - if video.description.nil?
+                %td -
+              - else
+                %td{style: "width: 70%"}= truncate(video.description, length: 81)  { link_to "see more", influencer_video_path(@influencer.id, video.id) }
+              %td= link_to "view on youtube", "https://www.youtube.com/watch?v=#{video.youtube_id}", target: :_blank
+              %td.right= "#{video.like_count}"
+              %td.right= "#{video.dislike_count}"
+              %td.right= "#{video.comment_count}"
+            - rescue
+      - else
+        %tr
+          %td{colspan: 4}

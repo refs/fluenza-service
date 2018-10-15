@@ -1,0 +1,17 @@
+.container.container-fluid.wide-container
+  %h3 Most Popular Categories
+  - if !params[:category]
+    %table.table.fz-table
+      %tbody
+        - @categories.each do |i|
+          %tr
+            - key = Video.category_ids.key(i[0])
+            %td= link_to key, "/youtube_categories?category=#{i[0]}"
+  - else
+    = render 'filters'
+    %table.table.fz-table
+      %tbody
+        - @accounts.each do |account|
+          %tr
+            %td= image_tag account.youtube_channel_thumbnail, style: "width: 40px"
+            %td= link_to account.influencer.title, influencer_path(account.influencer)

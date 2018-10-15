@@ -1,0 +1,31 @@
+.container.wide-container.yt-media
+  %table.table.fz-table
+    %thead
+      %tr
+        %td
+        %td
+        %td
+        %td.right likes
+        %td.right dislikes
+        %td.right comments
+    %tbody
+      - if @videos.any?
+        - @videos.each do |video|
+          - begin
+            %tr
+              %td.fz-far__left= link_to image_tag(Yt::Video.new(id: video.youtube_id).thumbnail_url), influencer_video_path(@influencer, video), class: 'yt-video-image'
+              - if video.description.nil?
+                %td -
+              - else
+                %td{style: "width: 70%"}= truncate(video.description, length: 81)  { link_to "see more", influencer_video_path(@influencer.id, video.id) }
+              %td= link_to "view on youtube", "https://www.youtube.com/watch?v=#{video.youtube_id}", target: :_blank
+              %td.right= "#{video.like_count}"
+              %td.right= "#{video.dislike_count}"
+              %td.right= "#{video.comment_count}"
+            - rescue
+      - else
+        %tr
+          %td{colspan: 4}
+
+.container{style: "text-align: center"}
+  .pagination= will_paginate @videos

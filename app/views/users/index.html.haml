@@ -1,0 +1,14 @@
+.container.wide-container
+  %table.table.table-hover
+    %thead
+      %tr
+        %td email
+        %td roles
+        %td
+    %tbody
+      - @users.includes(:users_roles, :roles).each do |u|
+        %tr
+          %td= link_to u.email, user_path(u)
+          %td= u.roles.map(&:name).join(", ")
+          - if current_user.admin?
+            %td= link_to 'delete', user_path(u), method: :delete, class: "btn btn-danger btn-xs"

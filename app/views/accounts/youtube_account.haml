@@ -1,0 +1,21 @@
+.container.wide-container
+  %h1= @account.youtube_channel_title
+  %table.table.table-hover
+    %thead
+      %tr
+        %td comment count
+        %td videos count
+        %td fluenza_views_count
+    %tbody
+      %tr
+        %td= @account.youtube_channel_comment_count
+        %td= @account.youtube_channel_video_count
+        %td= @account.fluenza_views_count
+
+.container.wide-container
+  - @account.videos.order('published_at DESC').each do |v|
+    .panel.panel-info
+      .panel-heading
+        ="#{v.title}"
+      .panel-body
+        %p= "views: #{v.view_count} | comments: #{v.comment_count} | likes: #{v.like_count} | dislikes: #{v.dislike_count} | favorites: #{v.favorite_count}"

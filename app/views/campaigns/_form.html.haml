@@ -1,0 +1,50 @@
+.container.wide-container.row
+  .col.s10.offset-s1
+    - url = request.path_info
+    - if url.include?('new')
+      %h5 Creating a campaign
+    - else
+      %h5= "Editing: #{@campaign.name}"
+    %br
+    = simple_form_for [@user, @campaign] do |f|
+      .form-group
+        = f.label :name
+        = f.text_field :name, type: 'text', class: 'form-control', autofocus: true, placeholder: 'Set a remarkable name for your campaign...'
+      .form-group.wide-select
+        = f.label 'Budget'
+        = f.text_field :budget, class: 'form-control', placeholder: 'Decide how much 💰💰💰 you want to allocate...'
+      .form-group.wide-select
+        = f.label :campaign_briefing
+        = f.text_area :briefing, type: 'text', class: 'form-control', placeholder: 'Prepare a briefing for the content creators'
+      .form-group.wide-select
+        = f.label :backlinks
+        = f.text_area :backlinks, type: 'text', class: 'form-control', placeholder: 'Any traceable text that goes on the deliverable\'s description to notify Fluenza the deliverable belongs to this campaign...'
+      .row
+        .col.s6
+          .form-group.wide-select
+            = f.label 'start date'
+            = f.text_field :start_date, class: 'datepicker', placeholder: 'start date'
+        .col.s6
+          .form-group.wide-select
+            = f.label 'termination date'
+            = f.text_field :end_date, class: 'datepicker', placeholder: 'termination date'
+      %hr
+      .form-group.wide-select
+        = f.label :comments
+        = f.text_area :comments, type: 'text', class: 'form-control', placeholder: 'Extra thoughts? here\'s the place...'
+      .form-group.right
+        = f.submit class: 'btn btn-success'
+
+:javascript
+  $('.datepicker').pickadate({
+    selectMonths: true,
+    selectYears: 3,
+    today: 'Today',
+    clear: 'Clear',
+    close: 'Ok',
+    closeOnSelect: false
+  });
+
+  $(document).ready(function() {
+    $(".select-2-el").select2({multiple: true})
+  });

@@ -1,0 +1,56 @@
+- unless current_user.agency.nil?
+  %h5 Agency
+  .row
+    .col.s12
+      %ul.collection
+        %li.collection-item= current_user.agency.name
+
+.row
+  .col.s8
+    %h5 Watching
+    - if @profile.influencers.any?
+      - @profile.influencers.includes(:account).each do |i|
+        %ul.collection
+          - if i.platform == 'YouTube'
+            %li.collection-item.avatar
+              = image_tag i.account.youtube_channel_thumbnail, style: 'width: 40px', class: 'circle'
+              %span.title= link_to i.title, influencer_path(i)
+              %p= "#{number_to_human(i.account.youtube_channel_subscriber_count)} subscribers"
+              %p= "#{number_to_human(i.account.youtube_channel_view_count)} views"
+              .secondary-content
+                %td
+                  = form_tag '/unfollow' do
+                    = hidden_field_tag 'influencer_id', i.id
+                    = hidden_field_tag 'user_id', current_user.id
+                    = submit_tag 'remove', class: 'btn btn-default'
+          - if i.platform == 'Instagram'
+            %li.collection-item.avatar
+              - if i.account.ig_profile_picture.nil?
+              - else
+                = image_tag i.account.ig_profile_picture, class: 'circle'
+              %span.title= link_to i.title, influencer_path(i)
+              %p= "#{number_to_human(i.account.ig_follows)} followers"
+              %p= "#{number_to_human(i.account.ig_overall_likes)} likes"
+              .secondary-content
+                %td
+                  = form_tag '/unfollow' do
+                    = hidden_field_tag 'influencer_id', i.id
+                    = hidden_field_tag 'user_id', current_user.id
+                    = submit_tag 'remove', class: 'btn btn-default'
+    - else
+      .collection.with-header
+        .collection-header.center
+          = "Influencers you're following will appear here. #{link_to ' Start by adding some here.', influencers_path}".html_safe
+
+  .col.s4
+    %h5 Campaigns
+    - if current_user.campaigns.any?
+      .collection
+        - current_user.campaigns.order("created_at DESC").each do |campaign|
+          = link_to campaign.name, user_campaign_path(current_user, campaign), class: 'collection-item'
+      .btn.center
+        = link_to 'New campaign', new_user_campaign_path(current_user), style: 'color: white; text-decoration: none;'
+    - else
+      .collection.with-header
+        .collection-header
+          = "You have no campaigns running,  #{link_to 'create one now', new_user_campaign_path(current_user)}".html_safe
